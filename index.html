@@ -431,14 +431,101 @@ body {
 .tab-panel { display: none; }
 .tab-panel.on { display: block; }
 
-/* 경고 */
-.warn { background: #fef9ec; border: 1px solid #f0dba0; border-radius: 10px; padding: 9px 12px; font-size: 10px; color: #8b6a00; line-height: 1.7; margin-bottom: 10px; }
+/* ── 전략 탭 스타일 ── */
+.strat-ticker-row { background:var(--card); border:1.5px solid var(--border); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow); margin-bottom:10px; }
+.strat-chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.strat-chip { padding:5px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--bg); color:var(--text2); font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; cursor:pointer; transition:.2s; }
+.strat-chip.active { background:#dce8f8; border-color:rgba(0,102,204,.3); color:var(--accent); }
+.strat-chip:active { background:#dce8f8; }
+.strat-custom-row { display:flex; gap:7px; margin-bottom:10px; }
+.strat-inp { flex:1; background:var(--bg); border:1.5px solid var(--border); color:var(--text); padding:8px 12px; border-radius:9px; font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700; text-transform:uppercase; outline:none; transition:border-color .2s; }
+.strat-inp:focus { border-color:var(--accent); }
+.strat-inp::placeholder { text-transform:none; font-size:11px; font-weight:400; color:var(--muted2); }
+.strat-go { padding:8px 16px; border-radius:9px; background:#dce8f8; border:1.5px solid rgba(0,102,204,.25); color:var(--accent); font-size:12px; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+.strat-go:active { background:#c6d9f5; }
+.strat-current { display:flex; align-items:center; gap:8px; padding:8px 12px; background:var(--bg); border-radius:9px; border:1px solid var(--border); }
+.strat-curr-label { font-size:10px; color:var(--muted); }
+.strat-curr-val { font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:800; color:var(--accent); }
+.strat-curr-price { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text2); margin-left:auto; }
 
-/* 시뮬레이션 버튼 */
-.sim-wrap { display: flex; gap: 7px; margin-bottom: 10px; }
-.sim-btn { flex:1; padding:10px; border-radius:10px; background:#f0ebfa; border:1.5px solid rgba(107,79,160,.2); color:var(--purple); font-size:12px; font-weight:600; cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:.2s; }
-.sim-btn:active { background:#e3d9f5; }
-.stop-btn { flex:1; padding:10px; border-radius:10px; background:var(--bg); border:1.5px solid var(--border); color:var(--muted); font-size:12px; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+.strat-card { background:var(--card); border:1.5px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); margin-bottom:10px; }
+.strat-card-title { font-size:13px; font-weight:700; color:var(--accent); margin-bottom:4px; }
+.strat-desc { font-size:11px; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+
+.strat-fields { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.sf-item {}
+.sf-label { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.sf-input { width:100%; background:var(--bg); border:1.5px solid var(--border); color:var(--text); padding:9px 10px; border-radius:9px; font-family:'JetBrains Mono',monospace; font-size:15px; outline:none; transition:border-color .2s; }
+.sf-input:focus { border-color:var(--accent); }
+
+/* 시나리오 비교 */
+.strat-result { display:flex; flex-direction:column; gap:10px; margin-bottom:12px; }
+.scenario-card { border-radius:12px; padding:14px; border:1.5px solid; }
+.scenario-card.hold  { background:#f7f9fc; border-color:var(--border); }
+.scenario-card.swing { background:#edfbf3; border-color:#a3dfc0; }
+.sc-header { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.sc-icon { font-size:22px; }
+.sc-title { font-size:12px; font-weight:700; color:var(--text); }
+.sc-sub   { font-size:10px; color:var(--muted); margin-top:1px; }
+.sc-rows  { display:flex; flex-direction:column; gap:6px; }
+.sc-row   { display:flex; justify-content:space-between; align-items:center; font-size:12px; }
+.sc-label { color:var(--text2); }
+.sc-val   { font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--text); }
+.sc-val.green { color:var(--green); }
+.sc-vs { text-align:center; font-family:'Bebas Neue',cursive; font-size:18px; color:var(--muted2); letter-spacing:2px; }
+
+/* 요약 */
+.strat-summary { background:linear-gradient(135deg,#edfbf3,#dce8f8); border:1.5px solid #a3dfc0; border-radius:12px; padding:14px; margin-bottom:12px; }
+.ss-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.05); }
+.ss-row:last-child { border-bottom:none; }
+.ss-label { font-size:12px; color:var(--text2); }
+.ss-val   { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; }
+.ss-val.green { color:var(--green); }
+
+/* 세금 */
+.tax-note { background:#fef9ec; border:1.5px solid #f0dba0; border-radius:12px; padding:12px 14px; }
+.tax-title { font-size:11px; font-weight:700; color:var(--gold); margin-bottom:8px; }
+.tax-row { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; color:var(--text2); }
+.tax-row span:last-child { font-family:'JetBrains Mono',monospace; font-weight:600; }
+
+/* 분할매수 */
+.dca-result { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.dca-row { display:flex; align-items:center; gap:8px; padding:9px 12px; border-radius:9px; background:var(--bg); border:1px solid var(--border); font-size:12px; }
+.dca-step { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; color:white; }
+.dca-step-1 { background:var(--accent); }
+.dca-step-2 { background:#4a9eda; }
+.dca-step-3 { background:#7ab8e8; }
+.dca-step-4 { background:#aad0f0; }
+.dca-step-5 { background:#cce4f8; color:var(--text); }
+.dca-info { flex:1; }
+.dca-price { font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--text); }
+.dca-shares { font-size:10px; color:var(--muted); margin-top:1px; }
+.dca-amt { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text2); text-align:right; }
+
+.dca-summary { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:12px 14px; }
+.dca-sum-row { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; }
+.dca-sum-row span:last-child { font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--accent); }
+
+/* 손절/익절 */
+.rr-result { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.rr-item { border-radius:10px; padding:12px; text-align:center; }
+.rr-item.sl { background:#fef0ef; border:1.5px solid #f5bab5; }
+.rr-item.tp { background:#edfbf3; border:1.5px solid #a3dfc0; }
+.rr-item.inv { background:#dce8f8; border:1.5px solid rgba(0,102,204,.2); }
+.rr-item.rr { background:#f0ebfa; border:1.5px solid rgba(107,79,160,.2); }
+.rr-lbl { font-size:9px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+.rr-val { font-family:'Bebas Neue',cursive; font-size:24px; margin-top:3px; letter-spacing:1px; }
+.rr-item.sl .rr-val { color:var(--red); }
+.rr-item.tp .rr-val { color:var(--green); }
+.rr-item.inv .rr-val { color:var(--accent); }
+.rr-item.rr .rr-val { color:var(--purple); }
+.rr-sub { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* 공통 green */
+.green { color:var(--green) !important; }
+
+/* warn */
+.warn{background:#fef9ec;border:1px solid #f0dba0;border-radius:10px;padding:9px 12px;font-size:10px;color:#8b6a00;line-height:1.7;margin-bottom:10px}
 </style>
 </head>
 <body>
@@ -703,150 +790,197 @@ body {
     <div class="warn">⚠️ 본 대시보드는 교육·참고 목적의 보조 도구입니다. 지표는 의사 계산값이며 투자 결정의 최종 책임은 본인에게 있습니다.</div>
   </div>
 
-  <!-- ★ 탭2: 차트 ── -->
-  <div class="tab-panel" id="tp-chart">
-
-    <!-- 시장 지수 칩 -->
-    <div class="sec">🌍 시장 현황</div>
-    <div class="mkt-strip">
-      <div class="mkt-chip tsla-chip">
-        <div class="mk-name">TSLA</div>
-        <div class="mk-price" id="tslaMkt">$--</div>
-        <div class="mk-chg flat" id="tslaChg">--</div>
-      </div>
-      <div class="mkt-chip pltr-chip">
-        <div class="mk-name">PLTR</div>
-        <div class="mk-price" id="pltrMkt">$--</div>
-        <div class="mk-chg flat" id="pltrChg">--</div>
-      </div>
-      <div class="mkt-chip">
-        <div class="mk-name">S&P 500</div>
-        <div class="mk-price" id="spMkt">7,400</div>
-        <div class="mk-chg down" id="spChg">▼0.16%</div>
-      </div>
-      <div class="mkt-chip">
-        <div class="mk-name">NASDAQ</div>
-        <div class="mk-price" id="nqMkt">26,088</div>
-        <div class="mk-chg down" id="nqChg">▼0.71%</div>
-      </div>
-      <div class="mkt-chip">
-        <div class="mk-name">DOW</div>
-        <div class="mk-price" id="djMkt">49,760</div>
-        <div class="mk-chg up" id="djChg">▲0.11%</div>
-      </div>
-      <div class="mkt-chip">
-        <div class="mk-name">WTI 유가</div>
-        <div class="mk-price">$102.18</div>
-        <div class="mk-chg down">▲4.19%</div>
-      </div>
-      <div class="mkt-chip">
-        <div class="mk-name">VIX</div>
-        <div class="mk-price">26.32</div>
-        <div class="mk-chg down">위험구간</div>
-      </div>
-    </div>
-
-    <!-- TradingView TSLA 차트 -->
-    <div class="sec">📈 TradingView 실시간 차트</div>
-    <div class="tv-card">
-      <div class="tv-header">
-        <div>
-          <div class="tv-title">TSLA · REAL-TIME</div>
-        </div>
-        <div style="display:flex;gap:5px;align-items:center">
-          <span class="tv-badge">● LIVE</span>
-          <div class="tv-tabs">
-            <button class="tv-tab on" onclick="switchTV('tsla',this)">TSLA</button>
-            <button class="tv-tab" onclick="switchTV('pltr',this)">PLTR</button>
-            <button class="tv-tab" onclick="switchTV('rsi',this)">RSI</button>
-          </div>
-        </div>
-      </div>
-      <div class="tv-inner" id="tvInner"></div>
-    </div>
-
-    <div class="warn">📡 TradingView 차트는 실시간(15분 지연) 데이터를 직접 표시합니다.</div>
-  </div>
-
-  <!-- ★ 탭3: 전략 ── -->
+  <!-- ★ 탭2: 전략 ── -->
   <div class="tab-panel" id="tp-strategy">
 
-    <!-- 순환매매 계산기 -->
-    <div class="sec">💰 순환매매 계산기</div>
-    <div class="calc-card">
-      <div class="calc-title">📊 주식수 증가 계산</div>
-      <div class="calc-fields">
-        <div>
-          <div class="cf-label">보유 주식수</div>
-          <input class="cf-input" type="number" id="cShares" value="100" inputmode="numeric">
+    <!-- 종목 선택 -->
+    <div class="sec">🎯 종목 선택</div>
+    <div class="strat-ticker-row">
+      <div class="strat-chips">
+        <button class="strat-chip active" onclick="setStratTicker('TSLA',this)">TSLA</button>
+        <button class="strat-chip" onclick="setStratTicker('PLTR',this)">PLTR</button>
+        <button class="strat-chip" onclick="setStratTicker('NVDA',this)">NVDA</button>
+        <button class="strat-chip" onclick="setStratTicker('AAPL',this)">AAPL</button>
+        <button class="strat-chip" onclick="setStratTicker('MSFT',this)">MSFT</button>
+      </div>
+      <div class="strat-custom-row">
+        <input class="strat-inp" type="text" id="stratCustomTicker" placeholder="직접 입력 (예: AMZN)" maxlength="6">
+        <button class="strat-go" onclick="applyCustomTicker()">적용</button>
+      </div>
+      <div class="strat-current">
+        <span class="strat-curr-label">분석 종목</span>
+        <span class="strat-curr-val" id="stratCurrTicker">TSLA</span>
+        <span class="strat-curr-price" id="stratCurrPrice">가격 로딩중...</span>
+      </div>
+    </div>
+
+    <!-- ① 순환매매 계산기 -->
+    <div class="sec">🔄 순환매매 — 주식수 증가 시뮬레이션</div>
+    <div class="strat-card">
+      <div class="strat-card-title">📊 매도 후 재매수 비교</div>
+      <div class="strat-desc">같은 금액으로 싸게 사면 주식 수가 늘어납니다</div>
+
+      <div class="strat-fields">
+        <div class="sf-item">
+          <div class="sf-label">보유 주식수</div>
+          <input class="sf-input" type="number" id="sfShares" value="100" inputmode="numeric" oninput="calcStrategy()">
         </div>
-        <div>
-          <div class="cf-label">매수가 ($)</div>
-          <input class="cf-input" type="number" id="cBuy" value="416" inputmode="decimal">
+        <div class="sf-item">
+          <div class="sf-label">평균 매수가 ($)</div>
+          <input class="sf-input" type="number" id="sfAvg" value="380" inputmode="decimal" oninput="calcStrategy()">
         </div>
-        <div>
-          <div class="cf-label">매도가 ($)</div>
-          <input class="cf-input" type="number" id="cSell" value="445" inputmode="decimal">
+        <div class="sf-item">
+          <div class="sf-label">매도 목표가 ($)</div>
+          <input class="sf-input" type="number" id="sfSell" value="445" inputmode="decimal" oninput="calcStrategy()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">재매수 목표가 ($)</div>
+          <input class="sf-input" type="number" id="sfRebuy" value="416" inputmode="decimal" oninput="calcStrategy()">
         </div>
       </div>
-      <button class="calc-go" onclick="calcSwing()">계산하기</button>
-      <div class="calc-res" id="calcRes">
-        <div class="cr-item"><div class="cr-label">매매 차익</div><div class="cr-val" id="crProfit">$0</div></div>
-        <div class="cr-item"><div class="cr-label">추가 주식수</div><div class="cr-val" id="crExtra">+0주</div></div>
-        <div class="cr-item"><div class="cr-label">재매수 주식수</div><div class="cr-val" id="crShares">0주</div></div>
-        <div class="cr-item"><div class="cr-label">수익률</div><div class="cr-val" id="crPct">0%</div></div>
+
+      <!-- 결과 비교 -->
+      <div class="strat-result" id="stratResult">
+
+        <!-- 시나리오 A: 보유 유지 -->
+        <div class="scenario-card hold">
+          <div class="sc-header">
+            <span class="sc-icon">🤝</span>
+            <div>
+              <div class="sc-title">시나리오 A</div>
+              <div class="sc-sub">그냥 보유</div>
+            </div>
+          </div>
+          <div class="sc-rows">
+            <div class="sc-row"><span class="sc-label">보유 주식수</span><span class="sc-val" id="holdShares">100주</span></div>
+            <div class="sc-row"><span class="sc-label">현재 평가액</span><span class="sc-val" id="holdValue">$0</span></div>
+            <div class="sc-row"><span class="sc-label">평단가</span><span class="sc-val" id="holdAvg">$0</span></div>
+            <div class="sc-row"><span class="sc-label">총 수익률</span><span class="sc-val" id="holdPct">0%</span></div>
+          </div>
+        </div>
+
+        <!-- 화살표 -->
+        <div class="sc-vs">VS</div>
+
+        <!-- 시나리오 B: 순환매매 -->
+        <div class="scenario-card swing">
+          <div class="sc-header">
+            <span class="sc-icon">🔄</span>
+            <div>
+              <div class="sc-title">시나리오 B</div>
+              <div class="sc-sub">매도 후 재매수</div>
+            </div>
+          </div>
+          <div class="sc-rows">
+            <div class="sc-row"><span class="sc-label">재매수 주식수</span><span class="sc-val green" id="swingShares">0주</span></div>
+            <div class="sc-row"><span class="sc-label">현재 평가액</span><span class="sc-val green" id="swingValue">$0</span></div>
+            <div class="sc-row"><span class="sc-label">새 평단가</span><span class="sc-val" id="swingAvg">$0</span></div>
+            <div class="sc-row"><span class="sc-label">총 수익률</span><span class="sc-val green" id="swingPct">0%</span></div>
+          </div>
+        </div>
+
+      </div><!-- /strat-result -->
+
+      <!-- 핵심 차이 요약 -->
+      <div class="strat-summary" id="stratSummary">
+        <div class="ss-row">
+          <span class="ss-label">📈 주식수 증가</span>
+          <span class="ss-val green" id="ssExtra">+0주</span>
+        </div>
+        <div class="ss-row">
+          <span class="ss-label">💵 추가 차익</span>
+          <span class="ss-val green" id="ssProfit">$0</span>
+        </div>
+        <div class="ss-row">
+          <span class="ss-label">📉 평단가 하락</span>
+          <span class="ss-val green" id="ssAvgDrop">$0</span>
+        </div>
+        <div class="ss-row">
+          <span class="ss-label">🎯 손익분기점</span>
+          <span class="ss-val" id="ssBep">$0</span>
+        </div>
+      </div>
+
+      <!-- 세금 고려 -->
+      <div class="tax-note">
+        <div class="tax-title">⚠️ 세금 고려 (미국 주식 단기 매매)</div>
+        <div class="tax-row">
+          <span>매매 차익</span><span id="taxProfit">$0</span>
+        </div>
+        <div class="tax-row">
+          <span>예상 양도세 (22%)</span><span id="taxAmt" style="color:var(--red)">-$0</span>
+        </div>
+        <div class="tax-row" style="font-weight:700">
+          <span>세후 실수령액</span><span id="taxNet" style="color:var(--green)">$0</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px">※ 단기(1년 미만) 기준 추정값. 실제 세율은 소득 구간에 따라 다름</div>
       </div>
     </div>
 
-    <!-- 시뮬레이션 -->
-    <div class="sec">🎲 시뮬레이션</div>
-    <div class="sim-wrap">
-      <button class="sim-btn" onclick="toggleSim()" id="simBtn">🎲 시뮬레이션 시작</button>
-      <button class="stop-btn" onclick="stopSim()">■ 정지</button>
+    <!-- ② 분할매수 계획기 -->
+    <div class="sec">📐 분할매수 계획기</div>
+    <div class="strat-card">
+      <div class="strat-card-title">🪜 단계별 분할매수 시뮬레이션</div>
+      <div class="strat-desc">한 번에 사지 않고 나눠서 사면 평균단가를 낮출 수 있습니다</div>
+
+      <div class="strat-fields">
+        <div class="sf-item">
+          <div class="sf-label">총 투자금 ($)</div>
+          <input class="sf-input" type="number" id="dpTotal" value="42000" inputmode="numeric" oninput="calcDCA()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">분할 횟수</div>
+          <select class="sf-input" id="dpSplit" onchange="calcDCA()" style="font-size:14px">
+            <option value="2">2분할</option>
+            <option value="3" selected>3분할</option>
+            <option value="4">4분할</option>
+            <option value="5">5분할</option>
+          </select>
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">1차 매수가 ($)</div>
+          <input class="sf-input" type="number" id="dp1" value="421" inputmode="decimal" oninput="calcDCA()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">하락 예상폭 (%)</div>
+          <input class="sf-input" type="number" id="dpDrop" value="3" inputmode="decimal" oninput="calcDCA()">
+        </div>
+      </div>
+
+      <div class="dca-result" id="dcaResult"></div>
+
+      <div class="dca-summary" id="dcaSummary"></div>
     </div>
 
-    <!-- 스위칭 전략 진행도 -->
-    <div class="sec">🔄 PLTR → TSLA 스위칭 진행도</div>
-    <div class="progress-card">
-      <div class="prog-label">
-        <span>PLTR 보유중</span><span>TSLA 전환 목표</span>
+    <!-- ③ 손절/익절 계산기 -->
+    <div class="sec">🛡️ 손절 · 익절 계산기</div>
+    <div class="strat-card">
+      <div class="strat-card-title">📏 리스크 관리</div>
+      <div class="strat-desc">손절가와 익절가를 미리 설정해 감정적 매매를 방지합니다</div>
+
+      <div class="strat-fields">
+        <div class="sf-item">
+          <div class="sf-label">매수가 ($)</div>
+          <input class="sf-input" type="number" id="rrBuy" value="421" inputmode="decimal" oninput="calcRR()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">보유 주식수</div>
+          <input class="sf-input" type="number" id="rrShares" value="100" inputmode="numeric" oninput="calcRR()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">손절 % (-)</div>
+          <input class="sf-input" type="number" id="rrSL" value="10" inputmode="decimal" oninput="calcRR()">
+        </div>
+        <div class="sf-item">
+          <div class="sf-label">익절 % (+)</div>
+          <input class="sf-input" type="number" id="rrTP" value="15" inputmode="decimal" oninput="calcRR()">
+        </div>
       </div>
-      <div class="prog-track"><div class="prog-fill"></div></div>
-      <div class="prog-steps">
-        <div class="prog-step done"><div class="ps-num done">✅</div><div class="ps-txt">시장분석</div></div>
-        <div class="prog-step done"><div class="ps-num done">✅</div><div class="ps-txt">Q1실적</div></div>
-        <div class="prog-step doing"><div class="ps-num doing">🔄</div><div class="ps-txt">FSD규제</div></div>
-        <div class="prog-step todo"><div class="ps-num todo">⏳</div><div class="ps-txt">옵티머스</div></div>
-        <div class="prog-step todo"><div class="ps-num todo">⏳</div><div class="ps-txt">분할매수</div></div>
-      </div>
+
+      <div class="rr-result" id="rrResult"></div>
     </div>
 
-    <!-- 핵심 이벤트 캘린더 -->
-    <div class="sec">🗓️ 핵심 이벤트 캘린더</div>
-    <div class="evt-list">
-      <div class="evt-item">
-        <div class="evt-date" style="color:var(--muted)">4/28✅</div>
-        <div><div class="evt-text">TSLA Q1 실적 발표 완료<br><strong>EPS $0.41</strong> (+14% 서프라이즈)</div><span class="evt-tag t-done">완료</span></div>
-      </div>
-      <div class="evt-item">
-        <div class="evt-date" style="color:var(--muted)">5/4✅</div>
-        <div><div class="evt-text">PLTR Q1 실적 발표 완료<br><strong>매출 $1.63B</strong> (+84.7%)</div><span class="evt-tag t-done">완료</span></div>
-      </div>
-      <div class="evt-item">
-        <div class="evt-date">7~8월</div>
-        <div><div class="evt-text">Optimus V3 양산 시작 예정<br>스위칭 결정 핵심 카탈리스트</div><span class="evt-tag t-tsla">TSLA</span></div>
-      </div>
-      <div class="evt-item">
-        <div class="evt-date">7/29</div>
-        <div><div class="evt-text">TSLA Q2 실적 발표<br>배달량 회복 + Cybercab 업데이트</div><span class="evt-tag t-tsla">TSLA</span></div>
-      </div>
-      <div class="evt-item">
-        <div class="evt-date">8/10</div>
-        <div><div class="evt-text">PLTR Q2 실적 발표<br>스위칭 전 최종 체크포인트</div><span class="evt-tag t-pltr">PLTR</span></div>
-      </div>
-    </div>
-
-    <div class="warn">⚠️ 본 도구는 교육·참고 목적입니다. 투자 결정의 최종 책임은 본인에게 있습니다.</div>
+    <div class="warn">⚠️ 모든 계산은 교육 목적의 시뮬레이션입니다. 세금·수수료는 실제와 다를 수 있습니다.</div>
   </div>
 
 </div><!-- /scroll -->
@@ -856,76 +990,21 @@ body {
   <button class="tb on" id="tb-signal" onclick="switchTab('signal')">
     <span class="tb-icon">📡</span>시그널
   </button>
-  <button class="tb" id="tb-chart" onclick="switchTab('chart')">
-    <span class="tb-icon">📈</span>차트
-  </button>
   <button class="tb" id="tb-strategy" onclick="switchTab('strategy')">
-    <span class="tb-icon">🔄</span>전략
+    <span class="tb-icon">💰</span>전략
   </button>
 </div>
 
 <script>
 // ===== 탭 전환 =====
 function switchTab(name) {
-  ['signal','chart','strategy'].forEach(t => {
+  ['signal','strategy'].forEach(t => {
     document.getElementById('tp-'+t).classList.remove('on');
     document.getElementById('tb-'+t).classList.remove('on');
   });
   document.getElementById('tp-'+name).classList.add('on');
   document.getElementById('tb-'+name).classList.add('on');
-  if(name==='chart') initTVChart('tsla');
 }
-
-// ===== TradingView 차트 =====
-let tvLoaded = {};
-function initTVChart(sym) {
-  const inner = document.getElementById('tvInner');
-  const configs = {
-    tsla: { symbol:'NASDAQ:TSLA', studies:[] },
-    pltr: { symbol:'NASDAQ:PLTR', studies:[] },
-    rsi:  { symbol:'NASDAQ:TSLA', studies:['STD;RSI','STD;Stochastic'] },
-  };
-  const cfg = configs[sym] || configs.tsla;
-  inner.innerHTML = '';
-  const container = document.createElement('div');
-  container.style.height = '100%';
-  inner.appendChild(container);
-
-  new TradingView.widget({
-    container_id: container,
-    width: '100%',
-    height: 340,
-    symbol: cfg.symbol,
-    interval: '15',
-    timezone: 'Asia/Seoul',
-    theme: 'light',
-    style: '1',
-    locale: 'ko',
-    toolbar_bg: '#ffffff',
-    enable_publishing: false,
-    hide_top_toolbar: false,
-    hide_legend: false,
-    save_image: false,
-    studies: cfg.studies,
-    container_id: container.id || 'tv_'+sym,
-  });
-}
-
-function switchTV(sym, btn) {
-  document.querySelectorAll('.tv-tab').forEach(t => t.classList.remove('on'));
-  btn.classList.add('on');
-  initTVChart(sym);
-}
-
-// TradingView 스크립트 로드
-function loadTV() {
-  if(window.TradingView) return;
-  const s = document.createElement('script');
-  s.src = 'https://s3.tradingview.com/tv.js';
-  s.onload = () => { if(document.getElementById('tp-chart').classList.contains('on')) initTVChart('tsla'); };
-  document.head.appendChild(s);
-}
-loadTV();
 
 // ===== 시계 & 장 상태 =====
 function tick() {
@@ -1149,22 +1228,198 @@ function stopSim(){
   document.getElementById('simBtn').textContent='🎲 시뮬레이션 시작';
 }
 
-// ===== 계산기 =====
-function calcSwing(){
-  const sh=parseFloat(document.getElementById('cShares').value)||100;
-  const bp=parseFloat(document.getElementById('cBuy').value)||416;
-  const sp=parseFloat(document.getElementById('cSell').value)||445;
-  if(sp<=bp){alert('매도가 > 매수가여야 합니다');return;}
-  const profit=sh*(sp-bp);
-  const newSh=Math.floor((sh*sp)/bp);
-  const extra=newSh-sh;
-  const pct=((sp-bp)/bp*100).toFixed(2);
-  document.getElementById('crProfit').textContent='$'+profit.toLocaleString('en-US',{maximumFractionDigits:0});
-  document.getElementById('crExtra').textContent='+'+extra+'주';
-  document.getElementById('crShares').textContent=newSh+'주';
-  document.getElementById('crPct').textContent='+'+pct+'%';
-  document.getElementById('calcRes').className='calc-res show';
+// ===== 전략 탭 — 종목 관리 =====
+let stratTicker = 'TSLA';
+let stratPrice  = 0;
+
+function setStratTicker(ticker, btn) {
+  stratTicker = ticker;
+  document.querySelectorAll('.strat-chip').forEach(c => c.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('stratCurrTicker').textContent = ticker;
+  document.getElementById('stratCustomTicker').value = '';
+  fetchStratPrice(ticker);
 }
+
+function applyCustomTicker() {
+  const v = document.getElementById('stratCustomTicker').value.trim().toUpperCase();
+  if(!v) return;
+  stratTicker = v;
+  document.querySelectorAll('.strat-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('stratCurrTicker').textContent = v;
+  fetchStratPrice(v);
+}
+
+async function fetchStratPrice(ticker) {
+  document.getElementById('stratCurrPrice').textContent = '조회중...';
+  try {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy, {signal: AbortSignal.timeout(8000)});
+    const outer = await res.json();
+    const data = JSON.parse(outer.contents);
+    const meta = data.chart.result[0].meta;
+    stratPrice = meta.regularMarketPrice;
+    document.getElementById('stratCurrPrice').textContent = `$${stratPrice.toFixed(2)}`;
+
+    // 현재가로 입력필드 자동 채우기
+    document.getElementById('sfSell').value  = (stratPrice * 1.07).toFixed(2);
+    document.getElementById('sfRebuy').value = (stratPrice * 0.97).toFixed(2);
+    document.getElementById('sfAvg').value   = (stratPrice * 0.92).toFixed(2);
+    document.getElementById('rrBuy').value   = stratPrice.toFixed(2);
+    document.getElementById('dp1').value     = stratPrice.toFixed(2);
+    calcStrategy(); calcDCA(); calcRR();
+  } catch(e) {
+    document.getElementById('stratCurrPrice').textContent = '조회 실패 — 직접 입력';
+  }
+}
+
+// ===== ① 순환매매 계산 =====
+function calcStrategy() {
+  const shares = parseFloat(document.getElementById('sfShares').value) || 100;
+  const avg    = parseFloat(document.getElementById('sfAvg').value)    || 380;
+  const sell   = parseFloat(document.getElementById('sfSell').value)   || 445;
+  const rebuy  = parseFloat(document.getElementById('sfRebuy').value)  || 416;
+
+  if(sell <= avg || rebuy >= sell) return;
+
+  const curPrice = stratPrice || sell; // 현재가 없으면 매도가 기준
+
+  // 시나리오 A: 보유 유지
+  const holdValue = shares * curPrice;
+  const holdPct   = ((curPrice - avg) / avg * 100);
+
+  // 시나리오 B: 매도 후 재매수
+  const sellTotal  = shares * sell;
+  const tax        = (sell - avg) * shares * 0.22; // 단기 양도세 22%
+  const afterTax   = sellTotal - tax;
+  const newShares  = Math.floor(afterTax / rebuy);
+  const remainder  = afterTax - (newShares * rebuy);
+  const swingValue = newShares * curPrice;
+  const swingPct   = ((curPrice - rebuy) / rebuy * 100);
+
+  // 화면 업데이트
+  document.getElementById('holdShares').textContent = shares + '주';
+  document.getElementById('holdValue').textContent  = '$' + holdValue.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('holdAvg').textContent    = '$' + avg.toFixed(2);
+  document.getElementById('holdPct').textContent    = (holdPct>=0?'+':'') + holdPct.toFixed(2) + '%';
+  document.getElementById('holdPct').style.color    = holdPct>=0?'var(--green)':'var(--red)';
+
+  document.getElementById('swingShares').textContent = newShares + '주';
+  document.getElementById('swingValue').textContent  = '$' + swingValue.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('swingAvg').textContent    = '$' + rebuy.toFixed(2);
+  document.getElementById('swingPct').textContent    = (swingPct>=0?'+':'') + swingPct.toFixed(2) + '%';
+  document.getElementById('swingPct').style.color    = swingPct>=0?'var(--green)':'var(--red)';
+
+  // 요약
+  const extra   = newShares - shares;
+  const profDiff = swingValue - holdValue;
+  const avgDrop  = avg - rebuy;
+  const bep      = avg; // 손익분기
+
+  document.getElementById('ssExtra').textContent   = (extra>=0?'+':'') + extra + '주';
+  document.getElementById('ssExtra').style.color   = extra>=0?'var(--green)':'var(--red)';
+  document.getElementById('ssProfit').textContent  = (profDiff>=0?'+$':'-$') + Math.abs(profDiff).toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('ssProfit').style.color  = profDiff>=0?'var(--green)':'var(--red)';
+  document.getElementById('ssAvgDrop').textContent = (avgDrop>=0?'-$':'+$') + Math.abs(avgDrop).toFixed(2);
+  document.getElementById('ssAvgDrop').style.color = avgDrop>=0?'var(--green)':'var(--red)';
+  document.getElementById('ssBep').textContent     = '$' + bep.toFixed(2);
+
+  // 세금
+  const rawProfit = (sell - avg) * shares;
+  const taxAmt    = rawProfit * 0.22;
+  const taxNet    = rawProfit - taxAmt;
+  document.getElementById('taxProfit').textContent = '$' + rawProfit.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('taxAmt').textContent    = '-$' + taxAmt.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('taxNet').textContent    = '$' + taxNet.toLocaleString('en-US',{maximumFractionDigits:0});
+}
+
+// ===== ② 분할매수 계산 =====
+function calcDCA() {
+  const total  = parseFloat(document.getElementById('dpTotal').value)  || 42000;
+  const split  = parseInt(document.getElementById('dpSplit').value)    || 3;
+  const price1 = parseFloat(document.getElementById('dp1').value)      || 421;
+  const drop   = parseFloat(document.getElementById('dpDrop').value)   || 3;
+
+  const perBuy    = total / split;
+  let rows        = '';
+  let totalShares = 0;
+  let totalSpent  = 0;
+  const stepColors = ['dca-step-1','dca-step-2','dca-step-3','dca-step-4','dca-step-5'];
+
+  for(let i=0; i<split; i++) {
+    const buyPrice = price1 * Math.pow(1 - drop/100, i);
+    const shares   = Math.floor(perBuy / buyPrice);
+    const spent    = shares * buyPrice;
+    totalShares   += shares;
+    totalSpent    += spent;
+
+    rows += `
+      <div class="dca-row">
+        <div class="dca-step ${stepColors[i]}">${i+1}</div>
+        <div class="dca-info">
+          <div class="dca-price">$${buyPrice.toFixed(2)}</div>
+          <div class="dca-shares">${shares}주 매수</div>
+        </div>
+        <div class="dca-amt">$${spent.toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+      </div>`;
+  }
+
+  document.getElementById('dcaResult').innerHTML = rows;
+
+  const avgPrice = totalSpent / totalShares;
+  const curP = stratPrice || price1;
+  const evalVal = totalShares * curP;
+  const pct = ((curP - avgPrice)/avgPrice*100);
+
+  document.getElementById('dcaSummary').innerHTML = `
+    <div class="dca-sum-row"><span>총 매수 주식수</span><span>${totalShares}주</span></div>
+    <div class="dca-sum-row"><span>평균 매수가</span><span>$${avgPrice.toFixed(2)}</span></div>
+    <div class="dca-sum-row"><span>총 투자금</span><span>$${totalSpent.toLocaleString('en-US',{maximumFractionDigits:0})}</span></div>
+    <div class="dca-sum-row"><span>현재 평가액</span><span style="color:${pct>=0?'var(--green)':'var(--red)'}">$${evalVal.toLocaleString('en-US',{maximumFractionDigits:0})} (${pct>=0?'+':''}${pct.toFixed(2)}%)</span></div>
+  `;
+}
+
+// ===== ③ 손절/익절 계산 =====
+function calcRR() {
+  const buy    = parseFloat(document.getElementById('rrBuy').value)    || 421;
+  const shares = parseFloat(document.getElementById('rrShares').value) || 100;
+  const sl     = parseFloat(document.getElementById('rrSL').value)     || 10;
+  const tp     = parseFloat(document.getElementById('rrTP').value)     || 15;
+
+  const slPrice  = buy * (1 - sl/100);
+  const tpPrice  = buy * (1 + tp/100);
+  const slLoss   = (slPrice - buy) * shares;
+  const tpProfit = (tpPrice - buy) * shares;
+  const invest   = buy * shares;
+  const rr       = tp / sl;
+
+  document.getElementById('rrResult').innerHTML = `
+    <div class="rr-item sl">
+      <div class="rr-lbl">손절가</div>
+      <div class="rr-val">$${slPrice.toFixed(2)}</div>
+      <div class="rr-sub">-${sl}% / 손실 $${Math.abs(slLoss).toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+    </div>
+    <div class="rr-item tp">
+      <div class="rr-lbl">익절가</div>
+      <div class="rr-val">$${tpPrice.toFixed(2)}</div>
+      <div class="rr-sub">+${tp}% / 수익 $${tpProfit.toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+    </div>
+    <div class="rr-item inv">
+      <div class="rr-lbl">총 투자금</div>
+      <div class="rr-val">$${invest.toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+      <div class="rr-sub">${shares}주 × $${buy}</div>
+    </div>
+    <div class="rr-item rr">
+      <div class="rr-lbl">리스크/보상 비율</div>
+      <div class="rr-val">1 : ${rr.toFixed(1)}</div>
+      <div class="rr-sub">${rr>=2?'✅ 양호':'⚠️ 재검토 권장'}</div>
+    </div>
+  `;
+}
+
+// ===== 전략 탭 초기화 =====
+fetchStratPrice('TSLA');
 
 // ===== 자동 새로고침 (5분마다) =====
 setInterval(fetchAll, 5*60*1000);
