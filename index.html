@@ -6,8 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#f0f4fa">
-<meta name="description" content="TSLA·PLTR 실시간 매매 시그널 대시보드">
-<title>TSLA · Signal</title>
+<meta name="description" content="주식 실시간 매매 시그널 대시보드">
+<title>Stock · Signal Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -524,6 +524,46 @@ body {
 /* 공통 green */
 .green { color:var(--green) !important; }
 
+/* ── 종목 선택바 ── */
+.ticker-bar {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 13px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,30,80,0.04);
+  overflow-x: auto; scrollbar-width: none;
+}
+.ticker-bar::-webkit-scrollbar { display: none; }
+.ticker-chips { display: flex; gap: 5px; flex-shrink: 0; }
+.ticker-chip {
+  padding: 5px 13px; border-radius: 20px;
+  border: 1.5px solid var(--border); background: var(--bg);
+  color: var(--text2); font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; cursor: pointer; transition: .2s;
+  white-space: nowrap;
+}
+.ticker-chip.active {
+  background: #1a2e50; border-color: #1a2e50; color: #00d4ff;
+}
+.ticker-chip:active { opacity: .7; }
+.ticker-custom { display: flex; gap: 5px; flex-shrink: 0; margin-left: auto; }
+.ticker-custom-inp {
+  width: 80px; background: var(--bg); border: 1.5px solid var(--border);
+  color: var(--text); padding: 5px 9px; border-radius: 9px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; outline: none; transition: border-color .2s;
+}
+.ticker-custom-inp:focus { border-color: var(--accent); }
+.ticker-custom-inp::placeholder { text-transform: none; font-size: 10px; font-weight: 400; color: var(--muted2); }
+.ticker-custom-btn {
+  padding: 5px 12px; border-radius: 9px;
+  background: #dce8f8; border: 1.5px solid rgba(0,102,204,.25);
+  color: var(--accent); font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: 'JetBrains Mono', monospace;
+}
+.ticker-custom-btn:active { background: #c6d9f5; }
+
 /* warn */
 .warn{background:#fef9ec;border:1px solid #f0dba0;border-radius:10px;padding:9px 12px;font-size:10px;color:#8b6a00;line-height:1.7;margin-bottom:10px}
 </style>
@@ -533,8 +573,8 @@ body {
 <!-- ── 헤더 ── -->
 <div class="topbar">
   <div class="logo-wrap">
-    <div class="logo">TSLA·Signal</div>
-    <div class="logo-sub">매매 시그널 대시보드</div>
+    <div class="logo">Stock·Signal</div>
+    <div class="logo-sub">실시간 매매 시그널</div>
   </div>
   <div class="topbar-mid">
     <div class="mkt-pill">
@@ -546,6 +586,17 @@ body {
   <button class="ref-btn" onclick="fetchAll()" id="refBtn">↻</button>
 </div>
 
+<!-- ── 종목 선택바 (헤더 아래 고정) ── -->
+<div class="ticker-bar">
+  <div class="ticker-chips" id="signalChips">
+    <!-- 최근 조회 종목이 동적으로 표시됩니다 -->
+  </div>
+  <div class="ticker-custom">
+    <input class="ticker-custom-inp" type="text" id="customTickerInp" placeholder="코드·사명 입력" maxlength="12">
+    <button class="ticker-custom-btn" onclick="applyCustomSignalTicker()">GO</button>
+  </div>
+</div>
+
 <!-- ── 메인 스크롤 ── -->
 <div class="scroll">
 
@@ -555,7 +606,7 @@ body {
     <!-- 현재가 히어로 (다크 카드) -->
     <div class="price-hero">
       <div class="ph-row1">
-        <span class="ph-ticker">NASDAQ · TSLA</span>
+        <span class="ph-ticker" id="sigTicker">NASDAQ · TSLA</span>
         <span class="ph-badge delay" id="phBadge">로딩중...</span>
       </div>
       <div class="ph-price-row">
@@ -565,8 +616,8 @@ body {
       <div class="ph-grid">
         <div class="ph-stat"><div class="ph-stat-l">고가</div><div class="ph-stat-v" id="highDisp">--</div></div>
         <div class="ph-stat"><div class="ph-stat-l">저가</div><div class="ph-stat-v" id="lowDisp">--</div></div>
-        <div class="ph-stat"><div class="ph-stat-l">52주고</div><div class="ph-stat-v">$498.83</div></div>
-        <div class="ph-stat"><div class="ph-stat-l">실적발표</div><div class="ph-stat-v" style="color:#ffd740">7/29</div></div>
+        <div class="ph-stat"><div class="ph-stat-l">52주고</div><div class="ph-stat-v" id="high52Disp">--</div></div>
+        <div class="ph-stat"><div class="ph-stat-l">52주저</div><div class="ph-stat-v" id="low52Disp">--</div></div>
       </div>
       <div class="api-err-bar" id="apiErr">
         ⚠️ 자동 조회 실패 — 아래 입력창에 현재가를 직접 입력해 주세요.
@@ -796,21 +847,13 @@ body {
     <!-- 종목 선택 -->
     <div class="sec">🎯 종목 선택</div>
     <div class="strat-ticker-row">
-      <div class="strat-chips">
-        <button class="strat-chip active" onclick="setStratTicker('TSLA',this)">TSLA</button>
-        <button class="strat-chip" onclick="setStratTicker('PLTR',this)">PLTR</button>
-        <button class="strat-chip" onclick="setStratTicker('NVDA',this)">NVDA</button>
-        <button class="strat-chip" onclick="setStratTicker('AAPL',this)">AAPL</button>
-        <button class="strat-chip" onclick="setStratTicker('MSFT',this)">MSFT</button>
-      </div>
-      <div class="strat-custom-row">
-        <input class="strat-inp" type="text" id="stratCustomTicker" placeholder="직접 입력 (예: AMZN)" maxlength="6">
-        <button class="strat-go" onclick="applyCustomTicker()">적용</button>
+      <div class="strat-chips" id="recentChips">
+        <span style="font-size:11px;color:var(--muted)">위 검색창에서 종목코드 또는 사명을 입력하세요 (예: 테슬라, AMZN)</span>
       </div>
       <div class="strat-current">
-        <span class="strat-curr-label">분석 종목</span>
-        <span class="strat-curr-val" id="stratCurrTicker">TSLA</span>
-        <span class="strat-curr-price" id="stratCurrPrice">가격 로딩중...</span>
+        <span class="strat-curr-label">현재 분석 종목</span>
+        <span class="strat-curr-val" id="stratCurrTicker">--</span>
+        <span class="strat-curr-price" id="stratCurrPrice">종목을 선택하세요</span>
       </div>
     </div>
 
@@ -996,7 +1039,79 @@ body {
 </div>
 
 <script>
-// ===== 탭 전환 =====
+// ===== 사명 → 티커 변환 딕셔너리 =====
+const COMPANY_MAP = {
+  // 영어 사명
+  'tesla':       'TSLA', 'palantir':     'PLTR', 'nvidia':     'NVDA',
+  'apple':       'AAPL', 'microsoft':    'MSFT', 'amazon':     'AMZN',
+  'google':      'GOOGL','alphabet':     'GOOGL','meta':       'META',
+  'facebook':    'META', 'netflix':      'NFLX', 'spotify':    'SPOT',
+  'uber':        'UBER', 'airbnb':       'ABNB', 'coinbase':   'COIN',
+  'snowflake':   'SNOW', 'datadog':      'DDOG', 'shopify':    'SHOP',
+  'salesforce':  'CRM',  'oracle':       'ORCL', 'amd':        'AMD',
+  'intel':       'INTC', 'qualcomm':     'QCOM', 'arm':        'ARM',
+  'disney':      'DIS',  'boeing':       'BA',   'ford':       'F',
+  'gm':          'GM',   'rivian':       'RIVN', 'lucid':      'LCID',
+  'robinhood':   'HOOD', 'paypal':       'PYPL', 'square':     'SQ',
+  'block':       'SQ',   'sofi':         'SOFI', 'affirm':     'AFRM',
+  'twitter':     'X',    'spacex':       'TSLA', // SpaceX 미상장, TSLA 관련
+  // 한국어 사명
+  '테슬라':       'TSLA', '팔란티어':     'PLTR', '엔비디아':   'NVDA',
+  '애플':         'AAPL', '마이크로소프트':'MSFT', '아마존':     'AMZN',
+  '구글':         'GOOGL','알파벳':       'GOOGL','메타':       'META',
+  '넷플릭스':     'NFLX', '스포티파이':   'SPOT', '우버':       'UBER',
+  '에어비앤비':   'ABNB', '코인베이스':   'COIN', '디즈니':     'DIS',
+  '보잉':         'BA',   '포드':         'F',    '리비안':     'RIVN',
+  '루시드':       'LCID', '로빈후드':     'HOOD', '페이팔':     'PYPL',
+  '세일즈포스':   'CRM',  '오라클':       'ORCL', '인텔':       'INTC',
+  '퀄컴':         'QCOM', '쇼피파이':     'SHOP', '스노우플레이크':'SNOW',
+  '데이터독':     'DDOG', '소파이':       'SOFI', '어펌':       'AFRM',
+};
+
+function resolveToTicker(input) {
+  const trimmed = input.trim();
+  const lower   = trimmed.toLowerCase();
+  // 딕셔너리 매칭
+  if(COMPANY_MAP[lower]) return COMPANY_MAP[lower];
+  // 부분 매칭 (예: "테슬" → 테슬라)
+  const partialKey = Object.keys(COMPANY_MAP).find(k => k.includes(lower) || lower.includes(k));
+  if(partialKey) return COMPANY_MAP[partialKey];
+  // 그대로 티커로 사용
+  return trimmed.toUpperCase();
+}
+
+// ===== 현재 시그널 탭 종목 =====
+let signalTicker = 'TSLA';
+
+function changeSignalTicker(ticker, btn) {
+  signalTicker = ticker;
+  // 칩 active 업데이트
+  document.querySelectorAll('.ticker-chip').forEach(c => c.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('customTickerInp').value = '';
+  // 헤더 종목 표시 업데이트
+  document.getElementById('sigTicker').textContent = 'NASDAQ · ' + ticker;
+  // 가격 초기화 후 조회
+  document.getElementById('priceDisp').textContent = '---';
+  document.getElementById('chgDisp').textContent = '--';
+  document.getElementById('chgDisp').className = 'ph-chg flat';
+  document.getElementById('phBadge').className = 'ph-badge loading';
+  document.getElementById('phBadge').textContent = '조회중...';
+  fetchAll();
+}
+
+function applyCustomSignalTicker() {
+  const raw = document.getElementById('customTickerInp').value.trim();
+  if(!raw) return;
+  const ticker = resolveToTicker(raw);
+  document.getElementById('customTickerInp').value = ticker; // 변환된 코드로 표시
+  document.querySelectorAll('.ticker-chip').forEach(c => c.classList.remove('active'));
+  changeSignalTicker(ticker, null);
+}
+// Enter 키 지원
+document.getElementById('customTickerInp').addEventListener('keydown', e => {
+  if(e.key === 'Enter') applyCustomSignalTicker();
+});
 function switchTab(name) {
   ['signal','strategy'].forEach(t => {
     document.getElementById('tp-'+t).classList.remove('on');
@@ -1029,7 +1144,6 @@ setInterval(tick,1000); tick();
 
 // ===== Yahoo Finance API 호출 (CORS 프록시 사용) =====
 async function fetchPrice(ticker) {
-  // allorigins.win 프록시를 통해 Yahoo Finance 호출
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
   const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
   const res = await fetch(proxy, {signal: AbortSignal.timeout(8000)});
@@ -1042,6 +1156,8 @@ async function fetchPrice(ticker) {
     prev:   meta.previousClose || meta.chartPreviousClose,
     high:   meta.regularMarketDayHigh,
     low:    meta.regularMarketDayLow,
+    high52: meta.fiftyTwoWeekHigh,
+    low52:  meta.fiftyTwoWeekLow,
     vol:    meta.regularMarketVolume,
   };
 }
@@ -1050,22 +1166,23 @@ async function fetchAll() {
   const btn = document.getElementById('refBtn');
   btn.classList.add('spinning');
   try {
-    const [tsla, pltr] = await Promise.all([
-      fetchPrice('TSLA'),
-      fetchPrice('PLTR').catch(()=>null),
-    ]);
+    const data = await fetchPrice(signalTicker);
 
-    // TSLA 현재가 반영
-    applyPrice(tsla.price, tsla.prev, tsla.high, tsla.low);
+    // 현재가 반영
+    applyPrice(data.price, data.prev, data.high, data.low);
 
-    // 시장 탭 TSLA/PLTR 칩 업데이트
-    if(tsla) updateChip('tslaMkt','tslaChg', tsla.price, tsla.prev);
-    if(pltr) updateChip('pltrMkt','pltrChg', pltr.price, pltr.prev);
+    // 52주 고저 업데이트 (있을 경우)
+    if(data.high52) document.getElementById('high52Disp').textContent = '$'+data.high52.toFixed(2);
+    if(data.low52)  document.getElementById('low52Disp').textContent  = '$'+data.low52.toFixed(2);
 
     document.getElementById('phBadge').className='ph-badge delay';
     document.getElementById('phBadge').textContent='15분 지연';
     document.getElementById('apiErr').classList.remove('show');
-    addLog('neutral', `Yahoo Finance 조회 완료 — TSLA $${tsla.price.toFixed(2)}`);
+    addLog('neutral', `${signalTicker} 조회 완료 — $${data.price.toFixed(2)}`);
+
+    // ★ 시그널 탭에서 조회한 종목도 최근 목록에 추가
+    addRecentTicker(signalTicker);
+
   } catch(e) {
     document.getElementById('phBadge').className='ph-badge err';
     document.getElementById('phBadge').textContent='연결 실패';
@@ -1228,6 +1345,41 @@ function stopSim(){
   document.getElementById('simBtn').textContent='🎲 시뮬레이션 시작';
 }
 
+// ===== 최근 조회 종목 관리 (최대 6개) =====
+let recentTickers = [];
+
+function addRecentTicker(ticker) {
+  // 중복 제거 후 맨 앞에 추가
+  recentTickers = recentTickers.filter(t => t !== ticker);
+  recentTickers.unshift(ticker);
+  if(recentTickers.length > 6) recentTickers = recentTickers.slice(0, 6);
+  renderRecentChips();
+}
+
+function renderRecentChips() {
+  // ── 시그널 탭 선택바 ──
+  const sigWrap = document.getElementById('signalChips');
+  if(recentTickers.length === 0) {
+    sigWrap.innerHTML = '<span style="font-size:10px;color:var(--muted2)">종목을 입력하세요</span>';
+  } else {
+    sigWrap.innerHTML = recentTickers.map(t => `
+      <button class="ticker-chip${t === signalTicker ? ' active' : ''}"
+        onclick="changeSignalTicker('${t}',this)">${t}</button>
+    `).join('');
+  }
+
+  // ── 전략 탭 칩 ──
+  const stratWrap = document.getElementById('recentChips');
+  if(recentTickers.length === 0) {
+    stratWrap.innerHTML = '<span style="font-size:11px;color:var(--muted)">종목을 조회하면 여기에 표시됩니다</span>';
+  } else {
+    stratWrap.innerHTML = recentTickers.map(t => `
+      <button class="strat-chip${t === stratTicker ? ' active' : ''}"
+        onclick="setStratTicker('${t}',this)">${t}</button>
+    `).join('');
+  }
+}
+
 // ===== 전략 탭 — 종목 관리 =====
 let stratTicker = 'TSLA';
 let stratPrice  = 0;
@@ -1242,13 +1394,19 @@ function setStratTicker(ticker, btn) {
 }
 
 function applyCustomTicker() {
-  const v = document.getElementById('stratCustomTicker').value.trim().toUpperCase();
-  if(!v) return;
-  stratTicker = v;
+  const raw = document.getElementById('stratCustomTicker').value.trim();
+  if(!raw) return;
+  const ticker = resolveToTicker(raw);
+  document.getElementById('stratCustomTicker').value = ticker;
   document.querySelectorAll('.strat-chip').forEach(c => c.classList.remove('active'));
-  document.getElementById('stratCurrTicker').textContent = v;
-  fetchStratPrice(v);
+  document.getElementById('stratCurrTicker').textContent = ticker;
+  stratTicker = ticker;
+  fetchStratPrice(ticker);
 }
+// Enter 키 지원
+document.getElementById('stratCustomTicker').addEventListener('keydown', e => {
+  if(e.key === 'Enter') applyCustomTicker();
+});
 
 async function fetchStratPrice(ticker) {
   document.getElementById('stratCurrPrice').textContent = '조회중...';
@@ -1262,6 +1420,9 @@ async function fetchStratPrice(ticker) {
     stratPrice = meta.regularMarketPrice;
     document.getElementById('stratCurrPrice').textContent = `$${stratPrice.toFixed(2)}`;
 
+    // ★ 최근 조회 목록에 추가
+    addRecentTicker(ticker);
+
     // 현재가로 입력필드 자동 채우기
     document.getElementById('sfSell').value  = (stratPrice * 1.07).toFixed(2);
     document.getElementById('sfRebuy').value = (stratPrice * 0.97).toFixed(2);
@@ -1271,6 +1432,7 @@ async function fetchStratPrice(ticker) {
     calcStrategy(); calcDCA(); calcRR();
   } catch(e) {
     document.getElementById('stratCurrPrice').textContent = '조회 실패 — 직접 입력';
+    addLog('neutral', `${ticker} 조회 실패`);
   }
 }
 
@@ -1418,8 +1580,12 @@ function calcRR() {
   `;
 }
 
-// ===== 전략 탭 초기화 =====
-fetchStratPrice('TSLA');
+// ===== 자동 새로고침 (5분마다) =====
+setInterval(fetchAll, 5*60*1000);
+
+// ===== 초기 실행 =====
+renderRecentChips(); // 최근 조회 칩 초기화 (비어있음)
+fetchAll();          // 시그널 탭 TSLA 자동 조회 → 최근 목록에도 추가됨
 
 // ===== 자동 새로고침 (5분마다) =====
 setInterval(fetchAll, 5*60*1000);
