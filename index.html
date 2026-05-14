@@ -602,15 +602,20 @@ function calcBB(c,p=20) {
 }
 
 // ── 시그널 ──
-function calcSig(rsi,stoch,bbPct) {
+function calcSig(rsi,stoch,bbPct,price,high52,low52) {
   const bc=[rsi<=35,stoch<=20,bbPct<=0.05];
   const sc=[rsi>=70,stoch>=85,bbPct>=0.95];
   const bn=bc.filter(Boolean).length,sn=sc.filter(Boolean).length;
-  if(bn>=3) return {label:'적극매수',pos:92,cls:'sb2',bn,sn,bc,sc};
-  if(bn===2) return {label:'매수권유',pos:75,cls:'sb1',bn,sn,bc,sc};
-  if(sn>=3)  return {label:'적극매도',pos:8, cls:'ss2',bn,sn,bc,sc};
-  if(sn===2) return {label:'매도권유',pos:25,cls:'ss1',bn,sn,bc,sc};
-  return {label:'관망',pos:50,cls:'sw',bn,sn,bc,sc};
+  const mid52=(high52&&low52)?(high52+low52)/2:null;
+  const near52Hi=high52&&((high52-price)/high52<0.05);
+  const near52Lo=low52&&((price-low52)/low52<0.05);
+  const isUpTrend=mid52?price>mid52:null;
+  const trendCtx=near52Hi?'52주 고가 근처':near52Lo?'52주 저가 근처':isUpTrend===true?'중장기 상단권':isUpTrend===false?'중장기 하단권':null;
+  if(bn>=3) return {label:'적극매수',pos:92,cls:'sb2',bn,sn,bc,sc,trendCtx};
+  if(bn===2) return {label:'매수권유',pos:75,cls:'sb1',bn,sn,bc,sc,trendCtx};
+  if(sn>=3)  return {label:'적극매도',pos:8, cls:'ss2',bn,sn,bc,sc,trendCtx};
+  if(sn===2) return {label:'매도권유',pos:25,cls:'ss1',bn,sn,bc,sc,trendCtx};
+  return {label:'관망',pos:50,cls:'sw',bn,sn,bc,sc,trendCtx};
 }
 
 // ── 검색 ──
@@ -703,7 +708,7 @@ async function doSearch(ticker) {
     hideSkel();
     applyData(data,false);
     addRecent(ticker);
-    const sig=calcSig(data.rsi,data.stoch,data.bb.pct);
+    const sig=calcSig(data.rsi,data.stoch,data.bb.pct,data.price,data.high52,data.low52);
     compareData[ticker]={rsi:data.rsi,signal:sig.label,ts:Date.now()};
     renderCmp(); save();
     setBadge('delay','준실시간');
@@ -802,7 +807,7 @@ function applyData(d,isCache) {
   setBadgeEl('bbBadge',bb.pct>=1?['ib-sell','매도']:bb.pct<=0?['ib-buy','매수']:['ib-neutral','중립']);
 
   // 시그널
-  const sig=calcSig(rsi,stoch,bb.pct);
+  const sig=calcSig(rsi,stoch,bb.pct,price,high52,low52);
   document.getElementById('sigNeedle').style.left=sig.pos+'%';
   document.getElementById('sigResult').className='sig-result '+sig.cls;
   setEl('sigVal',sig.label,SCOLOR[sig.label]);
@@ -820,7 +825,7 @@ function applyData(d,isCache) {
     if(c.ok) return `<span class="sbc ok">${c.lbl} ${c.bt}</span>`;
     if(c.warn) return `<span class="sbc warn">${c.lbl} ${c.st}</span>`;
     return `<span class="sbc off">${c.lbl} 중립</span>`;
-  }).join('');
+  }).join('')+(sig.trendCtx?`<span class="sbc off">📍 ${sig.trendCtx}</span>`:'');
 
   // 히스토리 기록
   if(sig.label!==lastSignal||ticker!==(historyLog[0]?.ticker)) {
