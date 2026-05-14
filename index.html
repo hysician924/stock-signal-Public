@@ -566,36 +566,48 @@ async function pfetch(url, isSearch=false) {
   throw lastErr;
 }
 
-// ── API: 일봉 1회로 모든 데이터 수집 ──
+// ── API: 일봉(지표) + v7 quote(기본정보) ──
 async function fetchAll(ticker) {
   const key=ticker+'_1d';
   const cached=cache[key];
   if(cached&&Date.now()-cached.ts<5*60*1000) return cached.data;
 
-  // 일봉 3개월치: 지표 계산 + 기본정보 + 프리/애프터 모두 포함
+  // 1차: 일봉 3개월치 → 지표 계산 (필수)
   const data=await pfetch(
-    `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=3mo&includePrePost=true`
+    `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=3mo`
   );
   const r=data.chart.result[0];
   const meta=r.meta;
   const q=r.indicators.quote[0];
-
   const closes=q.close.filter(v=>v!=null);
   const highs =q.high.filter(v=>v!=null);
   const lows  =q.low.filter(v=>v!=null);
 
-  // 프리/애프터마켓
-  const mktState=meta.marketState||'CLOSED'; // PRE / REGULAR / POST / CLOSED
-  let extPrice=null, extChg=null, extLabel=null;
-  if(mktState==='PRE'&&meta.preMarketPrice) {
-    extPrice=meta.preMarketPrice;
-    extChg=meta.preMarketChange||0;
-    extLabel='프리마켓';
-  } else if((mktState==='POST'||mktState==='POSTPOST')&&meta.postMarketPrice) {
-    extPrice=meta.postMarketPrice;
-    extChg=meta.postMarketChange||0;
-    extLabel='애프터마켓';
-  }
+  // 2차: v7 quote → 시총·PER·섹터·프리/애프터 (실패해도 지표는 정상)
+  let mktCap=null, pe=null, sector='--', name=meta.longName||meta.shortName||ticker;
+  let mktState='CLOSED', extPrice=null, extChg=null, extLabel=null;
+  try {
+    const q7=await pfetch(
+      `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}&fields=marketCap,trailingPE,sector,longName,marketState,preMarketPrice,preMarketChange,postMarketPrice,postMarketChange`
+    );
+    const qr=q7?.quoteResponse?.result?.[0];
+    if(qr) {
+      mktCap   = qr.marketCap   || null;
+      pe       = qr.trailingPE  || null;
+      sector   = qr.sector      || '--';
+      name     = qr.longName    || qr.shortName || name;
+      mktState = qr.marketState || 'CLOSED';
+      if(mktState==='PRE'&&qr.preMarketPrice) {
+        extPrice=qr.preMarketPrice;
+        extChg  =qr.preMarketChange||0;
+        extLabel='프리마켓';
+      } else if((mktState==='POST'||mktState==='POSTPOST')&&qr.postMarketPrice) {
+        extPrice=qr.postMarketPrice;
+        extChg  =qr.postMarketChange||0;
+        extLabel='애프터마켓';
+      }
+    }
+  } catch(e) { /* 2차 실패 시 기본값 유지 */ }
 
   const result={
     ticker,
@@ -604,13 +616,9 @@ async function fetchAll(ticker) {
     high52:   meta.fiftyTwoWeekHigh,
     low52:    meta.fiftyTwoWeekLow,
     vol:      meta.regularMarketVolume,
-    mktCap:   meta.marketCap,
     exchDisp: meta.exchangeName||meta.fullExchangeName||'--',
-    pe:       meta.trailingPE,
-    name:     meta.longName||meta.shortName||ticker,
-    sector:   meta.sector||'--',
+    mktCap, pe, sector, name,
     mktState, extPrice, extChg, extLabel,
-    // 일봉 기반 지표
     rsi:   calcRSI(closes,14),
     stoch: calcStoch(highs,lows,closes,14),
     bb:    calcBB(closes,20),
